@@ -53,7 +53,7 @@
                         {{item.nombre}}    
                       </option> 
                 </select>
-                    <span>{{usuario}}</span>
+                   
 
                 <h5>Contraseña</h5>
                     <input type="text" v-model="catalogo.pass" placeholder="Ingresa contraseña"
@@ -65,7 +65,7 @@
                         {{item.serie}}    
                       </option> 
                     </select>
-                    <span>{{equipo}}</span>
+                    
     
                 <h5>Direccion IP</h5>
                     <input type="text" v-model="catalogo.dir_ip" placeholder="Dirección IP"
