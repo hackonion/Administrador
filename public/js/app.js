@@ -2030,7 +2030,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -39449,8 +39448,6 @@ var render = function() {
                   0
                 ),
                 _vm._v(" "),
-                _c("span", [_vm._v(_vm._s(_vm.usuario))]),
-                _vm._v(" "),
                 _c("h5", [_vm._v("Contraseña")]),
                 _vm._v(" "),
                 _c("input", {
@@ -39521,8 +39518,6 @@ var render = function() {
                   }),
                   0
                 ),
-                _vm._v(" "),
-                _c("span", [_vm._v(_vm._s(_vm.equipo))]),
                 _vm._v(" "),
                 _c("h5", [_vm._v("Direccion IP")]),
                 _vm._v(" "),
