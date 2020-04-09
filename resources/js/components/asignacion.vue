@@ -7,6 +7,8 @@
                 Asignar equipo
             </div>
             <div class="card-body">
+            <div class="row">
+              <div class="col">
                   <input type="text" maxlength="18" 
                   class="form-control mb-2" v-model="catalogo.id" disabled>
                 <h5>Usuario</h5>
@@ -26,27 +28,33 @@
                         {{item.serie}}    
                       </option> 
                     </select>
-                  
-    
+              </div>
+                <div class="col">
                 <h5>Direccion IP</h5>
                     <input type="text" v-model="catalogo.dir_ip" placeholder="Dirección IP"
                     class="form-control mb-2">
 
                 <h5>Programas</h5>
-                    <textarea  class="form-control" v-model="catalogo.programas" row="3" placeholder="Agrega los programas del equipo"></textarea>
+                    <textarea  class="form-control mb-2" v-model="catalogo.programas" row="5" placeholder="Agrega los programas del equipo"></textarea>
                <button class="btn btn-primary" type="submit" >Editar</button>
                 <button class="btn btn-danger" @click.prevent="cancel">Cancelar</button>
+                </div>
+              </div>
             </div>
         </div>
         </form>
 
         <!--agrgar-->
         <form @submit.prevent="agregar" v-else>
+       <FlashMessage></FlashMessage>
         <div class="card" >
             <div class="card-header">
                 Asignar equipo
             </div>
             <div class="card-body">
+            <div class="row">
+             
+              <div class="col">
                 <h5>Usuario</h5>
                 <select class = "form-control mb-2"     v-model="usuario" placeholder="Usuario">
                       <option v-for="(item,index) in usuarios" :key="index" v-bind:value="item.nombre">
@@ -65,15 +73,17 @@
                         {{item.serie}}    
                       </option> 
                     </select>
-                    
-    
+              </div>
+              <div class="col">
                 <h5>Direccion IP</h5>
                     <input type="text" v-model="catalogo.dir_ip" placeholder="Dirección IP"
                     class="form-control mb-2">
 
                 <h5>Programas</h5>
-                    <textarea  class="form-control" v-model="catalogo.programas" row="3" placeholder="Agrega los programas del equipo"></textarea>
+                    <textarea  class="form-control mb-2" type="text" v-model="catalogo.programas" row="5" placeholder="Agrega los programas del equipo"></textarea>
                 <button class="btn btn-primary" id="ag" type="submit">Agregar</button>
+              </div>
+            </div>
             </div>
         </div>
         </form>
@@ -121,7 +131,6 @@
     </div>
 </template>
 <script>
-
 export default {
     
     data(){
@@ -177,7 +186,16 @@ export default {
     agregar: function (){
             
             
-            console.log(this.usuario,this.catalogo.pass,this.equipo,this.catalogo.dir_ip,this.catalogo.programas);
+           // console.log(this.usuario,this.catalogo.pass,this.equipo,this.catalogo.dir_ip,this.catalogo.programas);
+            if(this.usuario ==''|| this.catalogo.pass==''||
+               this.equipo ==''||this.catalogo.dir_ip =='')
+               {
+                  this.flashMessage.warning({title: 'Info', 
+                  message: 'Por favor llene todos los campos',
+                  time:1500});
+                 return;
+
+               }
 
             const params = {
             usuario:this.usuario,
@@ -195,7 +213,15 @@ export default {
 
             axios.post('/asignacion',params)
             .then( res=>{
-                this.getCatalogo();
+              this.catalogos.push(res.data);
+                 this.flashMessage.success({title: 'Success', 
+                  message: 'Se asigno el equipo',
+                  time:1500});
+              
+          
+
+                
+               
 
             });
     },
@@ -204,7 +230,13 @@ export default {
 
          axios.delete(`/asignacion/${item.id}`)
           .then(()=>{
-            this.getCatalogo();
+           
+              this.getCatalogo();
+              this.flashMessage.error({title:'Eliminado',
+              message:'Se elimino de la lista',
+              time:1500});
+            
+            
             
         })
       },
@@ -251,7 +283,11 @@ export default {
             this.catalogo.programas = "";
             axios.get('/asignacion')
                 .then(res => {
-              this.getCatalogo();          
+              this.catalogos = res.data;  
+              this.flashMessage.success({title: 'Success', 
+                  message: 'Se edito el elemento',
+                  time:1500});
+                 return;       
             })
         })    
     },

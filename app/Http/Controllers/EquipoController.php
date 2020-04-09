@@ -23,7 +23,7 @@ class EquipoController extends Controller
         if($request->ajax()){
             //$data = Equipos::all('id','serie','modelo','marca','fec_alt');
             $data = DB::table('equipos')
-            ->select('id','serie','modelo','marca','fec_alt')
+            ->select('id','serie','modelo','marca','tipo','fec_alt')
             ->orderBy('id')
             ->get();
             return response()->json($data);
@@ -55,6 +55,7 @@ class EquipoController extends Controller
         $equipo->serie = strtoupper($request->serie);
         $equipo->marca = strtoupper($request->marca);
         $equipo->modelo = strtoupper($request->modelo);
+        $equipo->tipo = strtoupper($request->tipo);
         $equipo->save();
         return response()->json($equipo);
     }
@@ -96,6 +97,7 @@ class EquipoController extends Controller
         $equipo->serie = strtoupper($request->serie);
         $equipo->marca = strtoupper($request->marca);
         $equipo->modelo = strtoupper($request->modelo);
+        $equipo->tipo = strtoupper($request->tipo);
         $equipo->save();
         return response()->json($equipo);
 

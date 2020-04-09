@@ -1,6 +1,7 @@
 
 <template>
 <div>
+  <FlashMessage></FlashMessage>
   <!--Editar-->
   <form  @submit.prevent="editar(tarea)" v-if="editarTexto">
     <div class="card" id = "agregar">
@@ -221,6 +222,18 @@ export default {
             console.log(this.tarea.clv_trab,this.sucursal,this.puesto,this.tarea.nombre,
              this.tarea.paterno,this.tarea.materno);
 
+             if(this.tarea.clv_trab =='' || this.sucursal =='' ||
+             this.puesto == '' ||
+             this.tarea.nombre == ''||
+             this.tarea.paterno == '' || 
+             this.tarea.materno)
+             {
+                this.flashMessage.warning({title: 'Info', 
+                  message: 'Por favor llene todos los campos',
+                  time:1500});
+                 return;
+             }
+
           const params = {clv_trab:this.tarea.clv_trab,clvE_sucursal:this.sucursal,clvE_puesto:this.puesto,
             nombre:this.tarea.nombre,paterno:this.tarea.paterno,materno:this.tarea.materno}
 
@@ -234,7 +247,10 @@ export default {
             axios.post('/acceso',params)
             .then( res=>{
                 this.tareas.push(res.data);
-
+                this.flashMessage.success({title: 'Success', 
+                message: 'Se asigno el equipo',
+                time:1500});
+              
             });
           
          
@@ -246,6 +262,9 @@ export default {
        axios.delete(`/acceso/${item.clv_trab}`)
           .then(()=>{
             this.getTareas();
+            this.flashMessage.error({title:'Eliminado',
+              message:'Se elimino de la lista',
+              time:1500});
             
         })
       },
@@ -277,7 +296,11 @@ export default {
             this.tarea.materno='';
             axios.get('/acceso')
                 .then(res => {
-            this.tareas = res.data;            
+            this.tareas = res.data;  
+            this.flashMessage.success({title: 'Success', 
+                  message: 'Se edito el elemento',
+                  time:1500});
+                 return;                 
             })
         })
     },

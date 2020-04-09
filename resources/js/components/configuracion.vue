@@ -1,6 +1,7 @@
 <template>
 
 <div>
+<FlashMessage></FlashMessage>
 <!-- Editar-->
 <form   @submit.prevent="editar(dato)" v-if="editarTexto">
     <div class="card" id = "agregar">
@@ -120,14 +121,25 @@ export default {
             }.bind(this));
       },
       agregar:function (){
-          const params = {clv_Puesto:this.dato.clv_Puesto,nombre:this.dato.nombre};
+          const params = {clv_Puesto:this.dato.clv_Puesto,
+          nombre:this.dato.nombre};
+          if(this.dato.clv_Puesto == '' ||
+             this.dato.nombre == '')
+          {
+                  this.flashMessage.warning({title: 'Info', 
+                  message: 'Por favor llene todos los campos',
+                  time:1500});
+                 return;
+          }
           this.dato.clv_Puesto ='';
           this.dato.nombre = '';
 
            axios.post('/configuracion',params)
             .then( res=>{
-                this.getConfiguracion();
-
+                this.datos.push(res.data);
+                  this.flashMessage.success({title: 'Success', 
+                  message: 'Se a agregado',
+                  time:1500});
             });
       },
        eliminar: function (item,index){
@@ -136,6 +148,9 @@ export default {
        axios.delete(`/configuracion/${item.ident_puestos}`)
           .then(()=>{
             this.getConfiguracion();
+          this.flashMessage.error({title:'Eliminado',
+              message:'Se elimino de la lista',
+              time:1500});
             
         })
       },
@@ -162,7 +177,11 @@ editar(dato){
             this.dato = {ident_puestos:'',clv_Puesto:'',nombre:''};
             axios.get('/configuracion')
                 .then(res => {
-            this.datos = res.data;            
+            this.datos = res.data;   
+            this.flashMessage.success({title: 'Success', 
+                  message: 'Se edito el elemento',
+                  time:1500});
+                 return;            
             })
         })    
     },
